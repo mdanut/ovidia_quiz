@@ -1,0 +1,186 @@
+/* responsive property */
+.responsive
+{
+	padding-right:15px;
+	padding-left:15px;
+	margin-right:auto;
+	margin-left:auto;
+	max-width:100%;
+}
+
+/* form settings */
+.quiz-form
+{
+	display: block;
+	padding: 0.5em 1em 5em 1em;
+	background: #FAFAD2;
+	border-style: outset;
+	border-width: 8px;
+	border-color: #FFD685;
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#body-id
+{
+	background-color: #6D64A2;
+}
+
+#timer
+{
+	padding: 0.25em 0 0.3em 0;
+	font-family: georgia, serif;
+	font-size: 25px;
+	font-weight: bold;
+	color:orange;
+	background: white;
+	width: 12%;
+	border-style: outset;
+	border-width: 2px;
+	border-color: black;
+	margin-top: 10px;
+}
+
+.blinking-timer
+{
+	padding: 0.25em 0 0.3em 0;
+	font-family: georgia, serif;
+	font-size: 25px;
+	font-weight: bold;
+	font-color: red;
+	background: white;
+	width: 12%;
+	border-style: outset;
+	border-width: 2px;
+	border-color: black;
+	margin-top: 10px;
+
+	-webkit-animation: blink 1s linear infinite;
+    animation: blink 1s linear infinite;
+}
+
+/* question style*/
+#question
+{
+	font-family: georgia, serif;
+	font-size: 25px;
+}
+
+/* question color*/
+p
+{
+	color: #FF6347;
+	font-weight: bold;
+}
+
+h3
+{
+	color: #2E8B57;
+}
+
+/* answer style*/
+#answer-label
+{
+	font-family: georgia, serif;
+	font-size: 22px;
+}
+
+#image, .img
+{
+	border-style: outset;
+	border-width: 5px;
+	border-color: #748DB2;
+	width:300px;
+	height:200px;
+	margin-top: 10px;
+	margin-right: 30px;
+}
+
+#image1, #image2
+{
+	border-style: outset;
+	border-width: 5px;
+	border-color: #748DB2;
+	width:250px;
+	height:150px;
+	margin-top: 10px;
+	margin-right: 30px;
+}
+
+.start-button, #start-over
+{
+	font-size: 1.8em;
+	background: #87CEEB;
+	border-color: #4747FF;
+	border-width: 4px;
+	border-style: outset;
+}
+
+.button
+{
+	font-size: 1.3em;
+	background: #87CEEB;
+	border-color: #4747FF;
+	border-width: 4px;
+	border-style: outset;
+	margin-left: 20px;
+	margin-top: 30px;
+}
+
+.button.active 
+{
+    background-color: #F8F8FF;
+    color: #525252;
+}
+
+ul
+{
+	list-style-type:none;
+}
+
+#start-message
+{
+	text-decoration: blink;
+	margin-left: 70px;
+	width: 60%;
+	position: relative;
+	/* Chrome, Safari, Opera , Internet Explorer*/
+	-webkit-animation: moveToRight 5s infinite; 
+    animation: moveToRight 10s infinite;
+    animation-timing-function: linear;
+    -webkit-animation-timing-function: linear;
+  	color: #FFFF33;
+  /* Simulated effect for Firefox and Opera
+	 and nice enhancement for WebKit */
+  	text-shadow: 3px 3px 0 #6D64A2,					    
+			   -1px -1px 0 #6D64A2,  
+			    1px -1px 0 #6D64A2,
+			   -1px  1px 0 #6D64A2,
+			    1px  1px 0 #6D64A2;
+  	
+   /* -webkit-animation: blink 1s linear infinite;
+    animation: blink 1s linear infinite;*/
+}
+
+@-webkit-keyframes moveToRight 
+{
+    from {left: 0px;}
+    to {left: 750px;} 
+}
+
+/* Standard syntax */
+@keyframes moveToRight 
+{
+    from {left: 0px;}
+    to {left: 750px;}
+}
+
+/*blinking timer */
+@-webkit-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; } 
+}
+*/
