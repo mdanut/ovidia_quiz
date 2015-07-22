@@ -37,17 +37,20 @@ var answerRecord = new Array(questions.length);//user choises
 var quiz = $('#quiz'); //Quiz div object
 var count = 900;
 var counter = setInterval(displayTime, 1000); //1000 will  run it every 1 second
-var timer;
 
-/*-----------------------------------
-CELE 2 FOR-URI LE POTI PUNE INTR-O FUNCTIE INIT(), IAR LA RELUAREA QUIZ-ULUI O POTI APELA
-------------------------------------*/
-for(var i = 0 ; i < questions.length ; i++)
-   	answerRecord[i] = new Array(numberOfAnswers);
+function init()
+{
+	for(var i = 0 ; i < questions.length ; i++)
+	   	answerRecord[i] = new Array(numberOfAnswers);
 
-for(var i = 0 ; i < questions.length ; i++)
-   	for(var j = 0; j < numberOfAnswers ; j++)
-		answerRecord[i][j] = false;
+	for(var i = 0 ; i < questions.length ; i++)
+	   	for(var j = 0; j < numberOfAnswers ; j++)
+			answerRecord[i][j] = false;
+
+	$('#start-over').hide();
+	$('#image2').hide();
+	$('#image1').hide();
+}
 
 function displayTime()
 {
@@ -57,15 +60,12 @@ function displayTime()
 		clearInterval(counter);
 		return;
 	}
+
 	var seconds = count % 60;
 	var minutes = Math.floor(count / 60);
 
 	minutes %= 60;
-	/*-----------------------------------
-	POATE AR FI BINE SA REDENUMESTI TAG-UL HTML <timer>, PENTRU CA NU E FOARTE SUGESTIV SI IN PLUS MAI AI SI O VARIABILA JS CU ACELASI NUME
-	POTI PUNE <timer-placeholder>
-    ------------------------------------*/
-	$("#timer").html(minutes + " : " + seconds + "  left") ; 
+	$("#timer-placeholder").html(minutes + " : " + seconds + "  left") ; 
 
 	if(count < 30)
 		blinkingTimer();
@@ -76,42 +76,29 @@ function displayTime()
 
 function blinkingTimer()
 {
-	$('div#timer').addClass("blinking-timer");
+	$('div#timer-placeholder').addClass("blinking-timer");
 }
 
 function createQuestionElement(index) 
 {
 	currQIndex = index;
-	
-	/*-----------------------------------
-	MAI AI NEVOIE DE FOR? NU POTI FOLOSI DOAR currQIndex?
-	------------------------------------*/
-	for(var i = 0 ; i < questions.length ; i++)
-	{
-		if( i == index)
-		{
-			/*-----------------------------------
-			IN LOC DE { id: 'question'} POTI FOLOSI attr(): $('<div>').attr(...)
-			------------------------------------*/
-			var questionElement = $('<div>', { id: 'question'});
-		    var header = $('<h3>Question ' + (index + 1) + '</h3>');
-		    questionElement.append(header);
+	var questionElement = $('<div>').attr("id", "question");
+	var header = $('<h3>Question ' + (index + 1) + '</h3>');
+	questionElement.append(header);
 
-		    var question = $('<p>').append(questions[currQIndex].questionText);
-		    questionElement.append(question);
+	var question = $('<p>').append(questions[currQIndex].questionText);
+	questionElement.append(question);
 
-			if(questions[currQIndex].option == "single")
-			{	    		
-			   	var radioButtons = createRadios(index);
-				questionElement.append(radioButtons);
-	    	}
-	    	else
-	    	{
-	   			var checkBoxes = createCheckboxes(index);
-			   	questionElement.append(checkBoxes);
-    		}
-    	}
+	if(questions[currQIndex].option == "single")
+	{	    		
+		var radioButtons = createRadios(index);
+		questionElement.append(radioButtons);
 	}
+	else
+	{
+	    var checkBoxes = createCheckboxes(index);
+		questionElement.append(checkBoxes);
+    }
 	return questionElement;
 }
 
@@ -121,12 +108,13 @@ function createRadios(index)
 	var radioList = $('<ul>');
 	var item;
 	var input = '';
-	var label = ''; /*-----------------------------------LASA UN RAND LIBER INAINTE DE FOR------------------------------------*/
+	var label = '';
+	
 	for (var i = 0; i < questions[currQIndex].answers.length; i++) 
 	{
 	    item = $('<li>');
-	    input = '<input type = "radio" name = "answer" id = "radiobutton'+i+'">'; /*------LASA SPATIU LIBER INAINTE SI DUPA i; TREBUIE INCHIS SI </input>-----*/
-	    label = '<label id = answer-label>'+questions[currQIndex].answers[i] + '</label>';
+	    input = '<input type = "radio" name = "answer" id = "radiobutton'+ i + '"></input>'; 
+	    label = '<label id = answer-label>'+ questions[currQIndex].answers[i] + '</label>';
 	    input += label;
 	    item.append(input);
 	    radioList.append(item);
@@ -140,12 +128,13 @@ function createCheckboxes(index)
 	var checkboxList = $('<ul>');
 	var item;
 	var input = '';
-	var label = ''; /*-----------------------------------LASA UN RAND LIBER INAINTE DE FOR------------------------------------*/
+	var label = '';
+
 	for (var i = 0; i < questions[currQIndex].answers.length; i++) 
 	{
 	    item = $('<li>');
-	    input = '<input type = "checkbox" name = "answer" id = "check'+i+'">'; /*------LASA SPATIU LIBER INAINTE SI DUPA i; TREBUIE INCHIS SI </input>-----*/
-	    label = '<label id = answer-label>'+questions[currQIndex].answers[i] + '</label>';
+	    input = '<input type = "checkbox" name = "answer" id = "check'+ i +'"></input>'; 
+	    label = '<label id = answer-label>'+ questions[currQIndex].answers[i] + '</label>';
 	    input += label;
 	    item.append(input);
 	    checkboxList.append(item);
@@ -162,7 +151,7 @@ function displayQuestion(input)
 		{
 			var nextOuestion = createQuestionElement(input);
 			quiz.append(nextOuestion).fadeIn();
-			getPreviousQuestion();
+			toPreviousQuestion();
 			viewAnswers(input);
 		}
 		else 
@@ -171,7 +160,7 @@ function displayQuestion(input)
 }
 
 //Click handler for the 'next' button
-$('#next').on('click', function (e)
+$('#next-button').on('click', function (e)
 {
 	e.preventDefault();
 	getUserChoise();	
@@ -181,16 +170,16 @@ $('#next').on('click', function (e)
 	if( currQIndex < numberOfAnswers)
 		viewAnswers();
 
-	if(currQIndex == 9) /*---------------------AR TREBUI SA FOLOSESTI: questions.length-----------------------*/
+	if(currQIndex == questions.length) 
 		alert("Urmeaza intrebarea finala!");
 });
 
 //Click handler for the 'previous' button
-$('#prev').on('click', function (e)
+$('#prev-button').on('click', function (e)
 {
 	e.preventDefault();
 	currQIndex--;
-	getPreviousQuestion();
+	toPreviousQuestion();
 	displayQuestion(currQIndex);	
 });
 
@@ -219,20 +208,19 @@ $('.button').on('mouseleave', function ()
     $(this).removeClass('active');
 });
 
-/*-----------------------------NUMELE FUNCTIEI NU SUGEREAZA CEEA CE SI FACE FUNCTIA--------------------------------------*/
-function getPreviousQuestion()
+function toPreviousQuestion()
 {
 	if(currQIndex < questions.length)	
       	if(currQIndex >= 1)
       	{
-      		$('#prev').show();
-      		$('#next').show();
+      		$('#prev-button').show();
+      		$('#next-button').show();
       	}
       	else 
       		if(currQIndex == 0)
 	      	{
-	      		$('#prev').hide();
-	      		$('#next').show();
+	      		$('#prev-button').hide();
+	      		$('#next-button').show();
 	      	}
 } 
 
@@ -241,9 +229,9 @@ function getUserChoise()
 	for(var i = 0 ; i < numberOfAnswers ; i++)
 	{
 		if(questions[currQIndex].option == "multiple")
-			answerRecord[currQIndex][i] = $("#check"+i).is(":checked"); 	  /*------LASA SPATIU LIBER INAINTE SI DUPA i-----*/
-		else
-			answerRecord[currQIndex][i] = $("#radiobutton"+i).is(":checked"); /*------LASA SPATIU LIBER INAINTE SI DUPA i-----*/
+			answerRecord[currQIndex][i] = $("#check"+ i ).is(":checked");
+		else 	
+			answerRecord[currQIndex][i] = $("#radiobutton"+ i ).is(":checked"); 
 	}
 }
 
@@ -254,9 +242,9 @@ function viewAnswers()
 		if(answerRecord[currQIndex][i] == true)
 		{
 			if(questions[currQIndex].option == "multiple")
-				$("#check"+i).prop('checked', true);       /*------LASA SPATIU LIBER INAINTE SI DUPA i-----*/
+				$("#check"+ i ).prop('checked', true);       
 			else
-				$("#radiobutton"+i).prop('checked', true); /*------LASA SPATIU LIBER INAINTE SI DUPA i-----*/
+				$("#radiobutton"+ i ).prop('checked', true); 
 		}
 } 
 
@@ -280,18 +268,15 @@ function displayScore()
 	$('#question').remove();
 
 	var score = $('<p>',{id: 'question'});
-	var header = $('<h2><center>You got '+totalPoints+ ' points out of 100 </center></h2>');
+	var header = $('<h2><center>You got '+ totalPoints + ' points out of 100 </center></h2>');
 
     score.append(header);
     quiz.append(score).fadeIn();
 
-	/*-----------------------------------
-	POTI PUNE INSTRUCTIUNILE DE HIDE SI SHOW IN ACELASI FUNCTIE DE INIT CA SI CELE 2 FUNCTII DE LA INCEPUTUL FISIERULUI
-	------------------------------------*/
-    $('#prev').hide();
-	$('#next').hide();
+    $('#prev-button').hide();
+	$('#next-button').hide();
 	$('#submit').hide();
-	$('#timer').hide();
+	$('#timer-placeholder').hide();
 	$('.img').hide();
 	$('#start-over').show();
 
@@ -309,7 +294,5 @@ $(document).ready(function()
 {
 	displayQuestion(currQIndex);
 	displayTime();
-	$('#start-over').hide();
-	$('#image2').hide();
-	$('#image1').hide();
+	init();
 });
